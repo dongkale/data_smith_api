@@ -1,17 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { winstonLogger } from './common/logger/winston.util';
-// import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import {
   initializeTransactionalContext,
   StorageDriver,
 } from 'typeorm-transactional';
 import 'winston-daily-rotate-file';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './common/swagger/setup-swagger';
-// import { EntityNotFoundExceptionFilter } from './common/filters/entity-not-found-exception.filter';
-// import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { CustomExceptionFilter } from './common/filters/custom-exception.filter';
 
 async function bootstrap() {
@@ -19,7 +16,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     cors: true,
-    logger: winstonLogger('DATA-SMITH-API'),
+    logger: winstonLogger('Data-Smith-Api'),
   });
 
   const configService = app.get(ConfigService);
@@ -47,11 +44,6 @@ async function bootstrap() {
 
   setupSwagger(app, prefix);
   app.setGlobalPrefix(prefix);
-
-  // await app.enableVersioning({
-  //   type: VersioningType.URI,
-  //   defaultVersion: '1',
-  // });
 
   await app.useGlobalFilters(new CustomExceptionFilter());
 

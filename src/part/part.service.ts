@@ -1,10 +1,5 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-  UseFilters,
-} from '@nestjs/common';
-import { EntityNotFoundError, Repository } from 'typeorm';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Part } from './part.entity';
 import { CreatePartDto, ResponsePartDto, UpdatePartDto } from './dto/part.dto';
@@ -18,52 +13,11 @@ export class PartService {
     private readonly partRepository: Repository<Part>,
   ) {}
 
-  // toResponsePartDto(list: Part[]): ResponsePartDto[] {
-  //   const response: ResponsePartDto[] = [];
-
-  //   if (!Array.isArray(list)) {
-  //     return [];
-  //   }
-
-  //   for (const part of list) {
-  //     response.push({
-  //       id: part.id,
-  //       name: part.name,
-  //       description: part.description,
-  //       dataJson: part.dataJson,
-  //     });
-
-  //     // const parseData = JSON.parse(part.dataJson);
-  //     // this.logger.debug(parseData);
-  //     this.logger.debug(
-  //       `List: id: ${part.id}, name: ${part.name}, description: ${part.description}, data_json: ${JSON.stringify(part.dataJson)}, created_at: ${part.createdAt}, updated_at: ${part.updatedAt}`,
-  //     );
-  //   }
-
-  //   return response;
-  // }
-
   async findAll(): Promise<ResponsePartDto[]> {
     try {
       const parts = await this.partRepository.find();
 
-      // const response: ResponsePartDto[] = [];
-
-      // if (Array.isArray(parts)) {
-      //   for (const part of parts) {
-      //     const parseData = JSON.parse(part.dataJson);
-      //     this.logger.debug(parseData);
-      //     this.logger.debug(
-      //       `List: id: ${part.id}, name: ${part.name}, description: ${part.description}, data_json: ${JSON.stringify(part.dataJson)}, created_at: ${part.createdAt}, updated_at: ${part.updatedAt}`,
-      //     );
-      //   }
-      // }
-      // const s = ResponsePartDto.convertFromPart(null);
-      // console.log(s);
-
       return ResponsePartDto.convertFromPart(parts);
-      // return this.toResponsePartDto(parts);
-      // return parts;
     } catch (error) {
       this.logger.debug(error);
       throw error;
@@ -73,11 +27,23 @@ export class PartService {
   async findOne(id: number): Promise<Part> {
     try {
       const part = await this.partRepository.findOne({ where: { id } });
-      // if (!part) {
-      //   throw new NotFoundException(`${id} Not Found.`);
-      // }
+      if (!part) {
+        throw new NotFoundException(`"${id}" Not Found.`);
+      }
       return ResponsePartDto.convertFromPart([part])?.[0] || null;
-      // return part ? this.toResponsePartDto([part])[0] : null;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async findOneByName(name: string): Promise<Part> {
+    try {
+      const part = await this.partRepository.findOne({ where: { name: name } });
+      if (!part) {
+        throw new NotFoundException(`"${name}" Not Found.`);
+      }
+      return ResponsePartDto.convertFromPart([part])?.[0] || null;
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -108,10 +74,6 @@ export class PartService {
         throw new NotFoundException(`${id} Not Found.`);
       }
 
-      // const result = await this.partRepository.softDelete({
-      //   id,
-      // });
-
       await this.partRepository.delete({ id: id });
 
       return ResponsePartDto.convertFromPart([part])?.[0] || null;
@@ -141,14 +103,4 @@ export class PartService {
       throw error;
     }
   }
-
-  // async findPart(id: number): Promise<Part> {
-  //   let part;
-  //   try {
-  //     part = await this.partRepository.findOneBy({ id: id });
-  //     return part || null;
-  //   } catch (error) {
-  //     return null;
-  //   }
-  // }
 }
