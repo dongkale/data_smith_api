@@ -90,7 +90,7 @@ export class ResponsePartDto {
         id: part.id,
         name: part.name,
         description: part.description,
-        dataJson: part.dataJson,
+        dataJson: JSON.stringify(part.dataJson),
       });
     }
 

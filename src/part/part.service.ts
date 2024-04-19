@@ -17,7 +17,7 @@ export class PartService {
     try {
       const parts = await this.partRepository.find();
 
-      return ResponsePartDto.convertFromPart(parts);
+      return ResponsePartDto.convertFromPartEx(parts);
     } catch (error) {
       this.logger.debug(error);
       throw error;
@@ -30,7 +30,7 @@ export class PartService {
       if (!part) {
         throw new NotFoundException(`"${name}" Not Found.`);
       }
-      return ResponsePartDto.convertFromPart([part])?.[0] || null;
+      return ResponsePartDto.convertFromPartEx([part])?.[0] || null;
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -47,7 +47,7 @@ export class PartService {
         where: { id: result.id },
       });
 
-      return ResponsePartDto.convertFromPart([created])?.[0] || null;
+      return ResponsePartDto.convertFromPartEx([created])?.[0] || null;
     } catch (error) {
       this.logger.debug(error);
       throw error;
@@ -63,7 +63,7 @@ export class PartService {
 
       await this.partRepository.delete({ name: name });
 
-      return ResponsePartDto.convertFromPart([part])?.[0] || null;
+      return ResponsePartDto.convertFromPartEx([part])?.[0] || null;
     } catch (error) {
       this.logger.debug(error);
       throw error;
@@ -84,7 +84,7 @@ export class PartService {
 
       const updated = await this.partRepository.findOne({ where: { name } });
 
-      return ResponsePartDto.convertFromPart([updated])?.[0] || null;
+      return ResponsePartDto.convertFromPartEx([updated])?.[0] || null;
     } catch (error) {
       this.logger.debug(error);
       throw error;
