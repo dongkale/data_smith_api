@@ -16,7 +16,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     cors: true,
-    logger: winstonLogger('Data-Smith-Api'),
+    logger: winstonLogger('data-smith-api'),
   });
 
   const configService = app.get(ConfigService);

@@ -58,10 +58,6 @@ export class CreatePartDto {
 
 export class UpdatePartDto {
   @IsString()
-  @ApiProperty({ name: 'name', description: '이름', example: '이름 1' })
-  name?: string;
-
-  @IsString()
   @ApiProperty({ name: 'description', description: '설명', example: '설명 1' })
   description?: string;
 

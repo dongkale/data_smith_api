@@ -44,31 +44,14 @@ export class PartController {
   }
 
   @ApiOperation({
-    summary: '지정 id 데이터 요청 API',
-    description: '지정 id 데이터를 요청한다.',
+    summary: '지정 name 데이터 요청 API',
+    description: '지정 name 데이터를 요청한다.',
   })
   @ApiOkCustomResponse(ResponsePartDto)
   @UseGuards(AuthGuard('api-key'))
-  @Get(':id')
-  async findOne(@Param('id') id: number) {
-    const find = await this.partService.findOne(id);
-
-    return {
-      resultCode: CustomResponseDto.SUCCESS_CODE,
-      resultMessage: CustomResponseDto.SUCCESS_STRING,
-      resultData: find ? [find] : [],
-    };
-  }
-
-  @ApiOperation({
-    summary: '지정 name 파츠 데이터 요청 API',
-    description: '지정 name 파츠 데이터를 요청한다.',
-  })
-  @ApiOkCustomResponse(ResponsePartDto)
-  @UseGuards(AuthGuard('api-key'))
-  @Get('/name/:name')
-  async findOneByName(@Param('name') name: string) {
-    const find = await this.partService.findOneByName(name);
+  @Get(':name')
+  async findOne(@Param('name') name: string) {
+    const find = await this.partService.findOne(name);
 
     return {
       resultCode: CustomResponseDto.SUCCESS_CODE,
@@ -100,9 +83,9 @@ export class PartController {
   })
   @ApiOkCustomResponse(ResponsePartDto)
   @UseGuards(AuthGuard('api-key'))
-  @Delete(':id')
-  async remove(@Param('id') id: number) {
-    const remove = await this.partService.remove(id);
+  @Delete(':name')
+  async remove(@Param('name') name: string) {
+    const remove = await this.partService.remove(name);
 
     return {
       resultCode: CustomResponseDto.SUCCESS_CODE,
@@ -117,9 +100,9 @@ export class PartController {
   })
   @ApiOkCustomResponse(ResponsePartDto)
   @UseGuards(AuthGuard('api-key'))
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() updatePart: UpdatePartDto) {
-    const update = await this.partService.update(id, updatePart);
+  @Put(':name')
+  async update(@Param('name') name: string, @Body() updatePart: UpdatePartDto) {
+    const update = await this.partService.update(name, updatePart);
 
     return {
       resultCode: CustomResponseDto.SUCCESS_CODE,
@@ -127,4 +110,21 @@ export class PartController {
       resultData: update,
     };
   }
+
+  // @ApiOperation({
+  //   summary: '지정 name 파츠 데이터 요청 API',
+  //   description: '지정 name 파츠 데이터를 요청한다.',
+  // })
+  // @ApiOkCustomResponse(ResponsePartDto)
+  // @UseGuards(AuthGuard('api-key'))
+  // @Get('/name/:name')
+  // async findOneByName(@Param('name') name: string) {
+  //   const find = await this.partService.findOneByName(name);
+
+  //   return {
+  //     resultCode: CustomResponseDto.SUCCESS_CODE,
+  //     resultMessage: CustomResponseDto.SUCCESS_STRING,
+  //     resultData: find ? [find] : [],
+  //   };
+  // }
 }
