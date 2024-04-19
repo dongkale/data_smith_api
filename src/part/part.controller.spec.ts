@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PartController } from './part.controller';
 import { PartService } from './part.service';
 import { Part } from './part.entity';
-import { CreatePartDto, UpdatePartDto } from './dto/part.dto';
+import { CreatePartDto, ResponsePartDto, UpdatePartDto } from './dto/part.dto';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
@@ -119,7 +119,7 @@ describe('PartController', () => {
 
   describe('findAll', () => {
     it('should return an array of parts', async () => {
-      const mockData: Part[] = [
+      const mockData: ResponsePartDto[] = [
         {
           id: 1,
           name: 'Part 1',
@@ -150,20 +150,20 @@ describe('PartController', () => {
 
   describe('findOne', () => {
     it('should return a part', async () => {
-      const testId = 1;
+      const testName = 'name_01';
 
       const mockData: Part = {
         id: 1,
-        name: 'Part 1',
+        name: 'name_01',
         description: 'Test Description 1',
         dataJson: '{}',
       };
       jest.spyOn(service, 'findOne').mockResolvedValue(mockData);
 
-      const result = await controller.findOne(testId);
+      const result = await controller.findOne(testName);
 
       expect(service.findOne).toHaveBeenCalledTimes(1);
-      expect(service.findOne).toHaveBeenCalledWith(testId);
+      expect(service.findOne).toHaveBeenCalledWith(testName);
 
       expect(result).toEqual({
         resultCode: 0,
@@ -173,14 +173,14 @@ describe('PartController', () => {
     });
 
     it('should return an empty array if part not found', async () => {
-      const nonExistId = 999;
+      const nonExistName = 'name_999';
 
       jest.spyOn(service, 'findOne').mockResolvedValue(null);
 
-      const result = await controller.findOne(nonExistId);
+      const result = await controller.findOne(nonExistName);
 
       expect(service.findOne).toHaveBeenCalledTimes(1);
-      expect(service.findOne).toHaveBeenCalledWith(nonExistId);
+      expect(service.findOne).toHaveBeenCalledWith(nonExistName);
 
       expect(result).toEqual({
         resultCode: 0,
@@ -212,20 +212,20 @@ describe('PartController', () => {
 
   describe('remove', () => {
     it('should remove a part', async () => {
-      const testId = 1;
+      const testName = 'name_01';
 
       const mockData = {
         id: 1,
-        name: 'Part 1',
+        name: 'name_01',
         description: 'Test Description 1',
         dataJson: '{}',
       };
       jest.spyOn(service, 'remove').mockResolvedValue(mockData);
 
-      const result = await controller.remove(testId);
+      const result = await controller.remove(testName);
 
       expect(service.remove).toHaveBeenCalledTimes(1);
-      expect(service.remove).toHaveBeenCalledWith(testId);
+      expect(service.remove).toHaveBeenCalledWith(testName);
 
       expect(result).toEqual({
         resultCode: 0,
@@ -260,13 +260,13 @@ describe('PartController', () => {
     // });
 
     it('should throw NotFoundException if part is not found', async () => {
-      const nonExistId = 999;
-      const exceptionMessage = `${nonExistId} Not Found.`;
+      const nonExistName = 'name_999';
+      const exceptionMessage = `${nonExistName} Not Found.`;
 
       jest.spyOn(service, 'findOne').mockResolvedValue(null);
 
       try {
-        await controller.remove(nonExistId);
+        await controller.remove(nonExistName);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toEqual(exceptionMessage);
@@ -276,20 +276,26 @@ describe('PartController', () => {
 
   describe('update', () => {
     it('should update a part', async () => {
+      const testName = 'name_01';
+
       const updatePartDto: UpdatePartDto = {
-        name: 'Updated Part',
         description: 'Updated Description',
         dataJson: '{}',
       };
-      const mockData = { id: 1, ...updatePartDto };
-      jest.spyOn(service, 'update').mockResolvedValue(mockData);
+      const responseData: ResponsePartDto = {
+        id: 1,
+        name: testName,
+        description: updatePartDto.description,
+        dataJson: updatePartDto.dataJson,
+      };
+      jest.spyOn(service, 'update').mockResolvedValue(responseData);
 
-      const result = await controller.update(1, updatePartDto);
+      const result = await controller.update(testName, updatePartDto);
 
       expect(result).toEqual({
         resultCode: 0,
         resultMessage: 'Success',
-        resultData: mockData,
+        resultData: responseData,
       });
     });
   });

@@ -25,16 +25,16 @@ export class Part {
   //   type: 'json',
   //   nullable: true,
   //   transformer: {
-  //     from(value: object): string {
+  //     to(value: any[]): string {
   //       return JSON.stringify(value);
   //     },
-  //     to(value: string): object {
+  //     from(value: string): any[] {
   //       return JSON.parse(value);
   //     },
   //   },
   // })
   @Column()
-  @ApiProperty({ description: '데이터' })
+  @ApiProperty({ description: '데이터', type: 'json' })
   dataJson: string;
 
   @CreateDateColumn()

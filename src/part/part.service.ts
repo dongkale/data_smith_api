@@ -37,17 +37,21 @@ export class PartService {
     }
   }
 
-  async create(createPartDto: CreatePartDto): Promise<Part> {
+  async create(createPartDto: CreatePartDto): Promise<ResponsePartDto> {
     try {
       const result = await this.partRepository.save(createPartDto, {
         reload: true,
       });
 
+      if (!result) {
+        throw new Error('Create Part Failed');
+      }
+
       const created = await this.partRepository.findOne({
         where: { id: result.id },
       });
 
-      return ResponsePartDto.convertFromPartEx([created])?.[0] || null;
+      return ResponsePartDto.convertFromPart([created])?.[0] || null;
     } catch (error) {
       this.logger.debug(error);
       throw error;
@@ -74,7 +78,7 @@ export class PartService {
     try {
       const part = await this.partRepository.findOne({ where: { name } });
       if (!part) {
-        throw new NotFoundException(`${name} Not Found.`);
+        throw new NotFoundException(`"${name}" Not Found.`);
       }
 
       await this.partRepository.save({
