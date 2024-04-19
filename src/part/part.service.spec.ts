@@ -367,55 +367,95 @@ describe('PartService', () => {
     */
   });
 
-  /*
   describe('remove()', () => {
     const partName = 'name_00';
-    const expectedPart = new Part();
 
-    it('should be remove post', async () => {
-      // repository.findOne.mockResolvedValue(findOneArgs);
-      // repository.softDelete.mockResolvedValue(softDeleteArgs);
-
-      repository.findOne.mockResolvedValue(expectedPart);
-
-      const removedPart = await service.remove(partName);
-
-      expect(repository.findOne).toHaveBeenCalledTimes(1);
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { name: partName },
-      });
-
-      expect(repository.delete).toHaveBeenCalledTimes(1);
-      expect(removedPart).toEqual(expectedPart);
-    });
-
-    it('should remove an existing part', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(expectedPart);
-      jest.spyOn(repository, 'delete').mockResolvedValue({});
+    it('should remove a part and return the removed part', async () => {
+      const findOneData = {
+        id: 1,
+        name: partName,
+        description: 'description_00',
+        dataJson: { number: 0, string: 'string_00' },
+      };
+      const expectedData = {
+        id: 1,
+        name: findOneData.name,
+        description: findOneData.description,
+        dataJson: JSON.stringify(findOneData.dataJson),
+      };
+      repository.findOne.mockResolvedValue(findOneData);
+      repository.delete.mockResolvedValue({});
 
       const result = await service.remove(partName);
 
-      expect(repository.findOne).toHaveBeenCalledTimes(1);
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { name: partName },
       });
-
-      expect(result).toEqual(expectedPart);
+      expect(repository.delete).toHaveBeenCalledWith({ name: partName });
+      expect(result).toEqual(expectedData);
     });
 
-    it('should nonExistId NotFoundException if part is not found', async () => {
-      const nonExistname = 'name_999'; // Non-existent ID
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+    it('should throw a NotFoundException if part is not found', async () => {
+      const exceptionString = `"${partName}" Not Found.`;
 
-      const result = service.remove(nonExistname);
+      repository.findOne.mockResolvedValue(null);
 
-      expect(repository.findOne).toHaveBeenCalledTimes(1);
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { name: nonExistname },
-      });
-
-      expect(result).rejects.toThrow(NotFoundException);
+      await expect(service.remove(partName)).rejects.toThrow(
+        new NotFoundException(exceptionString),
+      );
     });
+
+    it('should fail on exception', async () => {
+      repository.findOne.mockRejectedValue(new Error()); // save() 에 에러가 발생했을 때
+
+      await expect(service.remove(partName)).rejects.toThrow(new Error());
+    });
+
+    // it('should be remove post', async () => {
+    //   // repository.findOne.mockResolvedValue(findOneArgs);
+    //   // repository.softDelete.mockResolvedValue(softDeleteArgs);
+
+    //   const expectedPart = new Part();
+
+    //   repository.findOne.mockResolvedValue(expectedPart);
+
+    //   const removedPart = await service.remove(partName);
+
+    //   expect(repository.findOne).toHaveBeenCalledTimes(1);
+    //   expect(repository.findOne).toHaveBeenCalledWith({
+    //     where: { name: partName },
+    //   });
+
+    //   expect(repository.delete).toHaveBeenCalledTimes(1);
+    //   expect(removedPart).toEqual(expectedPart);
+    // });
+
+    // it('should remove an existing part', async () => {
+    //   jest.spyOn(repository, 'findOne').mockResolvedValue(expectedPart);
+    //   jest.spyOn(repository, 'delete').mockResolvedValue({});
+
+    //   const result = await service.remove(partName);
+
+    //   expect(repository.findOne).toHaveBeenCalledTimes(1);
+    //   expect(repository.findOne).toHaveBeenCalledWith({
+    //     where: { name: partName },
+    //   });
+
+    //   expect(result).toEqual(expectedPart);
+    // });
+
+    // it('should nonExistId NotFoundException if part is not found', async () => {
+    //   const nonExistname = 'name_999'; // Non-existent ID
+    //   jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+    //   const result = service.remove(nonExistname);
+
+    //   expect(repository.findOne).toHaveBeenCalledTimes(1);
+    //   expect(repository.findOne).toHaveBeenCalledWith({
+    //     where: { name: nonExistname },
+    //   });
+
+    //   expect(result).rejects.toThrow(NotFoundException);
+    // });
   });
-  */
 });

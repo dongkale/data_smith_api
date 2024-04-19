@@ -62,7 +62,7 @@ export class PartService {
     try {
       const part = await this.partRepository.findOne({ where: { name } });
       if (!part) {
-        throw new NotFoundException(`${name} Not Found.`);
+        throw new NotFoundException(`"${name}" Not Found.`);
       }
 
       await this.partRepository.delete({ name: name });
