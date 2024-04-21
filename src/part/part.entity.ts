@@ -4,8 +4,19 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ValueTransformer,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+
+export default class JsonTransformer<T> implements ValueTransformer {
+  to(obj: T): string {
+    return JSON.stringify(obj);
+  }
+
+  from(raw: string): T {
+    return JSON.parse(raw);
+  }
+}
 
 @Entity({ name: 'parts' })
 export class Part {
@@ -21,20 +32,24 @@ export class Part {
   @ApiProperty({ description: '설명' })
   description: string;
 
-  // @Column({
-  //   type: 'json',
-  //   nullable: true,
-  //   transformer: {
-  //     to(value: any[]): string {
-  //       return JSON.stringify(value);
-  //     },
-  //     from(value: string): any[] {
-  //       return JSON.parse(value);
-  //     },
-  //   },
-  // })
+  @Column({
+    // type: 'json',
+    nullable: true,
+    transformer: {
+      to(value: any): string {
+        console.log('value', value);
+        return '';
+      },
+      from(value: string): any {
+        console.log('value', value);
+        return {};
+      },
+    },
+
+    // transformer: new JsonTransformer(),
+  })
   @Column()
-  @ApiProperty({ description: '데이터', type: 'json' })
+  @ApiProperty({ description: '데이터' })
   dataJson: string;
 
   @CreateDateColumn()

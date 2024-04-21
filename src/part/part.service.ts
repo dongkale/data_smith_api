@@ -27,6 +27,17 @@ export class PartService {
   async findOne(name: string): Promise<Part> {
     try {
       const part = await this.partRepository.findOne({ where: { name } });
+        // .then((res) => {
+        //   console.log('res', res);
+        //   return {
+        //     id: res.id,
+        //     name: res.name,
+        //     description: res.description,
+        //     dataJson: JSON.stringify(res.dataJson),
+        //     createdAt: res.createdAt,
+        //     updatedAt: res.updatedAt,
+        //   };
+        // });
       if (!part) {
         throw new NotFoundException(`"${name}" Not Found.`);
       }
@@ -80,6 +91,17 @@ export class PartService {
       if (!part) {
         throw new NotFoundException(`"${name}" Not Found.`);
       }
+
+      const __v__ = {
+        ...part,
+        ...updatePart,
+      };
+
+      const __v__2 = {
+        ...{ id1: 1, id2: 2, id3: 3 },
+        ...{ id4: 4, id5: 5, id1: 6 },
+        ...{ id2: 7, id3: 8, id4: 9 },
+      };
 
       await this.partRepository.save({
         ...part,
