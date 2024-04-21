@@ -39,6 +39,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       transform: true,
       disableErrorMessages: isProduction,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

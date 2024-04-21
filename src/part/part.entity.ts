@@ -24,17 +24,40 @@ export class Part {
   @ApiProperty({ description: 'id' })
   id?: number;
 
-  @Column({ unique: true })
+  @Column({
+    unique: true,
+    transformer: {
+      to(value: any): string {
+        console.log('value', value);
+        return value;
+      },
+      from(value: string): any {
+        console.log('value', value);
+        return value;
+      },
+    },
+  })
   @ApiProperty({ description: '이름' })
   name: string;
 
-  @Column()
+  @Column({
+    transformer: {
+      to(value: any): string {
+        console.log('value', value);
+        return value;
+      },
+      from(value: string): any {
+        console.log('value', value);
+        return value;
+      },
+    },
+  })
   @ApiProperty({ description: '설명' })
   description: string;
 
   @Column({
     // type: 'json',
-    nullable: true,
+    // nullable: true,
     transformer: {
       to(value: any): string {
         console.log('value', value);
@@ -47,8 +70,7 @@ export class Part {
     },
 
     // transformer: new JsonTransformer(),
-  })
-  @Column()
+  })  
   @ApiProperty({ description: '데이터' })
   dataJson: string;
 
