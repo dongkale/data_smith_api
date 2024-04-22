@@ -8,16 +8,6 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class JsonTransformer<T> implements ValueTransformer {
-  to(obj: T): string {
-    return JSON.stringify(obj);
-  }
-
-  from(raw: string): T {
-    return JSON.parse(raw);
-  }
-}
-
 @Entity({ name: 'parts' })
 export class Part {
   @PrimaryGeneratedColumn()

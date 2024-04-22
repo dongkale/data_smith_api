@@ -42,6 +42,8 @@ export class PartService {
         throw new NotFoundException(`"${name}" Not Found.`);
       }
       return ResponsePartDto.convertFromPart([part])?.[0] || null;
+
+      // return this.mapper.map(user, UserDto, User);
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -92,10 +94,12 @@ export class PartService {
         throw new NotFoundException(`"${name}" Not Found.`);
       }
 
-      await this.partRepository.save({
-        ...part,
-        ...updatePart,
-      });
+      // await this.partRepository.save({
+      //   ...part,
+      //   ...updatePart,
+      // });
+
+      await this.partRepository.update(part.id, updatePart);
 
       const updated = await this.partRepository.findOne({ where: { name } });
 
