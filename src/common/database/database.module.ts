@@ -1,9 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+// import TypeOrmCustomLogger from './query.logger';
+// import { TypeOrmCustomLogger } from './query.logger';
+// import { TypeOrmCustomLoggerUtil } from './query.logger.util';
+import TypeOrmCustomLoggerUtil from './query.logger.util';
 
 @Module({
   imports: [
@@ -28,7 +32,11 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
           //   configService.get<string>('NODE_ENV') == 'development'
           //     ? true
           //     : false, // logging: true는 운영에서는 사용하지 마세요. 쿼리가 많아지면 성능에 영향을 줄 수 있습니다.
-          logging: ['error'],
+          // logging: ['error'],
+          // logging: ['query', 'error'],
+          logging: ['query', 'error', 'schema', 'log', 'info', 'warn'],
+          // logger: new TypeOrmCustomLogger(true), // new Logger()),
+          logger: new TypeOrmCustomLoggerUtil(new Logger()),
           extra: {
             connectionLimit: 5,
           },
