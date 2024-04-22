@@ -10,8 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PartService } from './part.service';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Part } from './part.entity';
 import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreatePartDto, UpdatePartDto, ResponsePartDto } from './dto/part.dto';
 import { CustomResponseDto } from '../common/response/custom-response.dto';
@@ -36,11 +34,11 @@ export class PartController {
   async findAll() {
     const findAll = await this.partService.findAll();
 
-    return {
+    return Object.assign({
       resultCode: CustomResponseDto.SUCCESS_CODE,
       resultMessage: CustomResponseDto.SUCCESS_STRING,
       resultData: findAll,
-    };
+    });
   }
 
   @ApiOperation({
@@ -53,11 +51,11 @@ export class PartController {
   async findOne(@Param('name') name: string) {
     const find = await this.partService.findOne(name);
 
-    return {
+    return Object.assign({
       resultCode: CustomResponseDto.SUCCESS_CODE,
       resultMessage: CustomResponseDto.SUCCESS_STRING,
       resultData: find ? [find] : [],
-    };
+    });
   }
 
   @ApiOperation({
@@ -70,11 +68,11 @@ export class PartController {
   async create(@Body() createPart: CreatePartDto) {
     const create = await this.partService.create(createPart);
 
-    return {
+    return Object.assign({
       resultCode: CustomResponseDto.SUCCESS_CODE,
       resultMessage: CustomResponseDto.SUCCESS_STRING,
       resultData: create,
-    };
+    });
   }
 
   @ApiOperation({
@@ -87,11 +85,11 @@ export class PartController {
   async remove(@Param('name') name: string) {
     const remove = await this.partService.remove(name);
 
-    return {
+    return Object.assign({
       resultCode: CustomResponseDto.SUCCESS_CODE,
       resultMessage: CustomResponseDto.SUCCESS_STRING,
       resultData: remove,
-    };
+    });
   }
 
   @ApiOperation({
@@ -104,27 +102,10 @@ export class PartController {
   async update(@Param('name') name: string, @Body() updatePart: UpdatePartDto) {
     const update = await this.partService.update(name, updatePart);
 
-    return {
+    return Object.assign({
       resultCode: CustomResponseDto.SUCCESS_CODE,
       resultMessage: CustomResponseDto.SUCCESS_STRING,
       resultData: update,
-    };
+    });
   }
-
-  // @ApiOperation({
-  //   summary: '지정 name 파츠 데이터 요청 API',
-  //   description: '지정 name 파츠 데이터를 요청한다.',
-  // })
-  // @ApiOkCustomResponse(ResponsePartDto)
-  // @UseGuards(AuthGuard('api-key'))
-  // @Get('/name/:name')
-  // async findOneByName(@Param('name') name: string) {
-  //   const find = await this.partService.findOneByName(name);
-
-  //   return {
-  //     resultCode: CustomResponseDto.SUCCESS_CODE,
-  //     resultMessage: CustomResponseDto.SUCCESS_STRING,
-  //     resultData: find ? [find] : [],
-  //   };
-  // }
 }

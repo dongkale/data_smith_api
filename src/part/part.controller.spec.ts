@@ -98,7 +98,7 @@ describe('PartController', () => {
       const createPartDto: CreatePartDto = {
         name: 'Test Part',
         description: 'Test Description',
-        dataJson: '{}',
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
 
       const mockData = { id: 1, ...createPartDto };
@@ -124,13 +124,13 @@ describe('PartController', () => {
           id: 1,
           name: 'Part 1',
           description: 'Test Description 1',
-          dataJson: '{}',
+          dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
         },
         {
           id: 2,
           name: 'Part 2',
           description: 'Test Description 2',
-          dataJson: '{}',
+          dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
         },
       ];
       jest.spyOn(service, 'findAll').mockResolvedValue(mockData);
@@ -156,7 +156,7 @@ describe('PartController', () => {
         id: 1,
         name: 'name_01',
         description: 'Test Description 1',
-        dataJson: '{}',
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
       jest.spyOn(service, 'findOne').mockResolvedValue(mockData);
 
@@ -218,7 +218,7 @@ describe('PartController', () => {
         id: 1,
         name: 'name_01',
         description: 'Test Description 1',
-        dataJson: '{}',
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
       jest.spyOn(service, 'remove').mockResolvedValue(mockData);
 
@@ -261,7 +261,7 @@ describe('PartController', () => {
 
     it('should throw NotFoundException if part is not found', async () => {
       const nonExistName = 'name_999';
-      const exceptionMessage = `${nonExistName} Not Found.`;
+      const exceptionMessage = `"${nonExistName}" Not Found.`;
 
       jest.spyOn(service, 'findOne').mockResolvedValue(null);
 
@@ -280,7 +280,7 @@ describe('PartController', () => {
 
       const updatePartDto: UpdatePartDto = {
         description: 'Updated Description',
-        dataJson: '{}',
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
       const responseData: ResponsePartDto = {
         id: 1,
