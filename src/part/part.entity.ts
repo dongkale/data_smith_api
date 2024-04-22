@@ -24,53 +24,27 @@ export class Part {
   @ApiProperty({ description: 'id' })
   id?: number;
 
-  @Column({
-    unique: true,
-    transformer: {
-      to(value: any): string {
-        console.log('value', value);
-        return value;
-      },
-      from(value: string): any {
-        console.log('value', value);
-        return value;
-      },
-    },
-  })
+  @Column({ unique: true })
   @ApiProperty({ description: '이름' })
   name: string;
 
-  @Column({
-    transformer: {
-      to(value: any): string {
-        console.log('value', value);
-        return value;
-      },
-      from(value: string): any {
-        console.log('value', value);
-        return value;
-      },
-    },
-  })
+  @Column()
   @ApiProperty({ description: '설명' })
   description: string;
 
   @Column({
-    // type: 'json',
-    // nullable: true,
+    type: 'json',
+    nullable: true,
     transformer: {
-      to(value: any): string {
-        console.log('value', value);
-        return '';
+      to(obj: any): string {
+        // return JSON.parse(obj);
+        return obj;
       },
-      from(value: string): any {
-        console.log('value', value);
-        return {};
+      from(value: any): string {
+        return JSON.stringify(value);
       },
     },
-
-    // transformer: new JsonTransformer(),
-  })  
+  })
   @ApiProperty({ description: '데이터' })
   dataJson: string;
 

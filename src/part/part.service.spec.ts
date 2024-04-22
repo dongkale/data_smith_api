@@ -87,7 +87,7 @@ describe('PartService', () => {
       const createPartDto: CreatePartDto = {
         name: 'mame_00',
         description: 'description_00',
-        dataJson: '{ "number": 0, "string": "string_00" }',
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
 
       const createdPart: Part = {
@@ -107,8 +107,6 @@ describe('PartService', () => {
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: createdPart.id },
       });
-
-      // console.log(JSON.parse(result.dataJson));
 
       // Json String 파싱이 잘 되나?
       expect(JSON.parse(result.dataJson)).toBeTruthy();
@@ -135,13 +133,13 @@ describe('PartService', () => {
           id: 1,
           name: 'name_01',
           description: 'description_01',
-          dataJson: {},
+          dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
         },
         {
           id: 2,
           name: 'name_02',
           description: 'description_02',
-          dataJson: {},
+          dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
         },
       ];
       const expectedData: ResponsePartDto[] = [
@@ -149,13 +147,13 @@ describe('PartService', () => {
           id: findData[0].id,
           name: findData[0].name,
           description: findData[0].description,
-          dataJson: JSON.stringify(findData[0].dataJson),
+          dataJson: findData[0].dataJson,
         },
         {
           id: findData[1].id,
           name: findData[1].name,
           description: findData[1].description,
-          dataJson: JSON.stringify(findData[1].dataJson),
+          dataJson: findData[1].dataJson,
         },
       ];
       repository.find.mockResolvedValue(findData);
@@ -182,14 +180,14 @@ describe('PartService', () => {
         id: 1,
         name: findName,
         description: 'description_00',
-        dataJson: { number: 0, string: 'string_00' },
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
 
       const expectedData = {
         id: findOneData.id,
         name: findOneData.name,
         description: findOneData.description,
-        dataJson: JSON.stringify(findOneData.dataJson),
+        dataJson: findOneData.dataJson,
       };
 
       repository.findOne.mockResolvedValue(findOneData);
@@ -263,14 +261,14 @@ describe('PartService', () => {
         id: 1,
         name: partName,
         description: 'description_00',
-        dataJson: { number: 0, string: 'string_00' },
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
 
       const findOne2Data = {
         id: 1,
         name: partName,
         description: updatedData.description,
-        dataJson: JSON.parse(updatedData.dataJson),
+        dataJson: updatedData.dataJson,
       };
 
       const updatedResponse: ResponsePartDto = {
@@ -279,8 +277,8 @@ describe('PartService', () => {
         description: updatedData.description,
         dataJson: updatedData.dataJson,
       };
-      repository.findOne.mockResolvedValueOnce(findOne1Data); // findOne() 함수가 1번 호출
-      repository.findOne.mockResolvedValueOnce(findOne2Data); // findOne() 함수가 2번 호출
+      repository.findOne.mockResolvedValueOnce(findOne1Data); // findOne() 함수가 1번째 호출
+      repository.findOne.mockResolvedValueOnce(findOne2Data); // findOne() 함수가 2번째 호출
       repository.save.mockResolvedValue(null);
 
       const result = await service.update(partName, updatedData);
@@ -375,13 +373,13 @@ describe('PartService', () => {
         id: 1,
         name: partName,
         description: 'description_00',
-        dataJson: { number: 0, string: 'string_00' },
+        dataJson: JSON.stringify({ number: 0, string: 'string_00' }),
       };
       const expectedData = {
         id: 1,
         name: findOneData.name,
         description: findOneData.description,
-        dataJson: JSON.stringify(findOneData.dataJson),
+        dataJson: findOneData.dataJson,
       };
       repository.findOne.mockResolvedValue(findOneData);
       repository.delete.mockResolvedValue({});
