@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -7,7 +7,8 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
 // import TypeOrmCustomLogger from './query.logger';
 // import { TypeOrmCustomLogger } from './query.logger';
 // import { TypeOrmCustomLoggerUtil } from './query.logger.util';
-import TypeOrmCustomLoggerUtil from './query.logger.util';
+import TypeOrmCustomLogger from './query.logger';
+import { TypeOrmCommonSubscriber } from './common-subscribe';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import TypeOrmCustomLoggerUtil from './query.logger.util';
           // entities: [Part],
           autoLoadEntities: true,
           synchronize: false,
+          subscribers: [TypeOrmCommonSubscriber],
           // configService.get<string>('NODE_ENV') == 'development'
           //   ? true
           //   : false, // synchronize: true는 운영에서는 사용하지 마세요
@@ -34,11 +36,29 @@ import TypeOrmCustomLoggerUtil from './query.logger.util';
           //     : false, // logging: true는 운영에서는 사용하지 마세요. 쿼리가 많아지면 성능에 영향을 줄 수 있습니다.
           // logging: ['error'],
           // logging: ['query', 'error'],
-          logging: ['query', 'error', 'schema', 'log', 'info', 'warn'],
-          // logger: new TypeOrmCustomLogger(true), // new Logger()),
-          logger: new TypeOrmCustomLoggerUtil(new Logger()),
-          extra: {
-            connectionLimit: 5,
+          // logging: ['query', 'error', 'schema', 'log', 'info', 'warn'],
+
+          // options: boolean | "all" | LogLevel[](LogLevel = "query" | "schema" | "error" | "warn" | "info" | "log" | "migration")
+          logger: new TypeOrmCustomLogger(
+            configService.get<string>('NODE_ENV') == 'development'
+              ? 'all'
+              : 'error',
+          ),
+          poolSize: 10,
+          poolErrorHandler: async (err) => {
+            const reconnection = setInterval(async () => {
+              console.log('Retrying connection... ' + err.message);
+              const connection = new DataSource({
+                type: 'mysql',
+                host: configService.get<string>('DB_HOST'),
+                port: configService.get<number>('DB_PORT'),
+                username: configService.get<string>('DB_USERNAME'),
+                password: configService.get<string>('DB_PASSWORD'),
+                database: configService.get<string>('DB_NAME'),
+              });
+              const db = await connection.initialize();
+              if (db.isInitialized) clearInterval(reconnection);
+            }, 1000);
           },
         };
       },

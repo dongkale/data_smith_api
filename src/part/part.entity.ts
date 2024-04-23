@@ -27,8 +27,8 @@ export class Part {
     nullable: true,
     transformer: {
       to(obj: any): string {
-        // return JSON.parse(obj);
-        return obj;
+        return JSON.parse(obj);
+        // return obj;
       },
       from(value: any): string {
         return JSON.stringify(value);
