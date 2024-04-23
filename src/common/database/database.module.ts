@@ -25,7 +25,7 @@ import { TypeOrmCommonSubscriber } from './common-subscribe';
           // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
           // entities: [Part],
           autoLoadEntities: true,
-          synchronize: false,
+          synchronize: false, // synchronize: true는 운영과 개발에도 사용 금지, 테이블을 많이 수정함
           subscribers: [TypeOrmCommonSubscriber],
           // configService.get<string>('NODE_ENV') == 'development'
           //   ? true
@@ -34,10 +34,6 @@ import { TypeOrmCommonSubscriber } from './common-subscribe';
           //   configService.get<string>('NODE_ENV') == 'development'
           //     ? true
           //     : false, // logging: true는 운영에서는 사용하지 마세요. 쿼리가 많아지면 성능에 영향을 줄 수 있습니다.
-          // logging: ['error'],
-          // logging: ['query', 'error'],
-          // logging: ['query', 'error', 'schema', 'log', 'info', 'warn'],
-
           // options: boolean | "all" | LogLevel[](LogLevel = "query" | "schema" | "error" | "warn" | "info" | "log" | "migration")
           logger: new TypeOrmCustomLogger(
             configService.get<string>('NODE_ENV') == 'development'

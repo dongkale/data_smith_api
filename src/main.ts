@@ -55,10 +55,36 @@ async function bootstrap() {
 
   app.useGlobalFilters(new CustomExceptionFilter());
 
-  await app.listen(port);
+  app.enableShutdownHooks();
 
-  console.log(
-    `[${appName}][${nodeEnv}] Application is running on: ${await app.getUrl()}`,
-  );
+  let isDisableKeepAlice = false;
+
+  app.use((req, res, next) => {
+    if (isDisableKeepAlice) {
+      res.set('Connection', 'close');
+    }
+    next();
+  });
+
+  process.on('SIGINT', async () => {
+    isDisableKeepAlice = false;
+    app.close().then(() => {
+      process.exit(0);
+    });
+  });
+
+  await app.listen(port, function () {
+    if (process.send) {
+      process.send('ready');
+    }
+
+    console.log(
+      `[${appName}][${nodeEnv}] application is listening on port ${port}...`,
+    );
+  });
+
+  // console.log(
+  //   `[${appName}][${nodeEnv}] Application is running on: ${await app.getUrl()}`,
+  // );
 }
 bootstrap();
