@@ -28,7 +28,6 @@ export class Part {
     transformer: {
       to(obj: any): string {
         return JSON.parse(obj);
-        // return obj;
       },
       from(value: any): string {
         return JSON.stringify(value);

@@ -1,19 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PartController } from './part.controller';
-import { PartService } from './part.service';
-import { Part } from './part.entity';
-import { PartSubscriber } from 'src/part/part.subscribe';
+import { PartFileService } from './part-file.service';
+import { PartFileController } from './part-file.controller';
 import { MulterModule } from '@nestjs/platform-express';
-// import { multerConfigService } from 'src/common/upload/multer.config';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
-// import { diskStorage } from 'multer';
-// import path from 'path';
-// import * as fs from 'fs';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { multerConfigService } from 'src/common/upload/multer.config';
+import { PartFile } from './part-file.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PartFileSubscriber } from './part-file.subscribe';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Part]),
+    TypeOrmModule.forFeature([PartFile]),
     // MulterModule.registerAsync({ useClass: MulterConfigService }),
     // MulterModule.register({
     //   dest: './uploads', // 파일이 업로드될 디렉토리 설정
@@ -53,19 +50,19 @@ import { MulterModule } from '@nestjs/platform-express';
     //   inject: [ConfigService],
     // }),
 
-    // MulterModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => {
-    //     const dirPath =
-    //       configService.get<string>('PART_FILE_UPLOAD_PATH') ||
-    //       './common_uploads';
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        const dirPath =
+          configService.get<string>('PART_FILE_UPLOAD_PATH') ||
+          './common_uploads';
 
-    //     return multerConfigService(dirPath);
-    //   },
-    // }),
+        return multerConfigService(dirPath);
+      },
+    }),
   ],
-  controllers: [PartController],
-  providers: [PartService, PartSubscriber],
+  controllers: [PartFileController],
+  providers: [PartFileService, PartFileSubscriber],
 })
-export class PartModule {}
+export class PartFileModule {}

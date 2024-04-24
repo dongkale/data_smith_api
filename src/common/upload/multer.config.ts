@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+// import { Injectable } from '@nestjs/common';
 import * as multer from 'multer';
 import * as path from 'path';
 import * as fs from 'fs';
-import { MulterOptionsFactory } from '@nestjs/platform-express';
-import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+// import { MulterOptionsFactory } from '@nestjs/platform-express';
+// import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 // @Injectable()
 // export class MulterConfigService implements MulterOptionsFactory {
@@ -38,7 +38,9 @@ import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer
 
 export const multerConfigService = (dirPath: string) => {
   try {
-    fs.mkdirSync(dirPath, { recursive: true });
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
   } catch (error) {
     console.error('Error while creating directory', error);
   }

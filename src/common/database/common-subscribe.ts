@@ -17,35 +17,37 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    * Called after entity is loaded.
    */
   afterLoad(entity: any) {
-    console.log(`AFTER ENTITY LOADED: `, entity);
+    console.log(`COMMON AFTER ENTITY LOADED: `, entity);
   }
 
   /**
    * Called before post insertion.
    */
   beforeInsert(event: InsertEvent<any>) {
-    console.log(`BEFORE POST INSERTED: `, event.entity);
+    // event.entity.updatedAt = new Date();
+    console.log(`COMMON BEFORE POST INSERTED: `, event.entity);
   }
 
   /**
    * Called after entity insertion.
    */
   afterInsert(event: InsertEvent<any>) {
-    console.log(`AFTER ENTITY INSERTED: `, event.entity);
+    // event.entity.updatedAt = new Date();
+    console.log(`COMMON AFTER ENTITY INSERTED: `, event.entity);
   }
 
   /**
    * Called before entity update.
    */
   beforeUpdate(event: UpdateEvent<any>) {
-    console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+    console.log(`COMMON BEFORE ENTITY UPDATED: `, event.entity);
   }
 
   /**
    * Called after entity update.
    */
   afterUpdate(event: UpdateEvent<any>) {
-    console.log(`AFTER ENTITY UPDATED: `, event.entity);
+    console.log(`COMMON AFTER ENTITY UPDATED: `, event.entity);
   }
 
   /**
@@ -53,7 +55,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   beforeRemove(event: RemoveEvent<any>) {
     console.log(
-      `BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `,
+      `COMMON BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `,
       event.entity,
     );
   }
@@ -63,7 +65,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   afterRemove(event: RemoveEvent<any>) {
     console.log(
-      `AFTER ENTITY WITH ID ${event.entityId} REMOVED: `,
+      `COMMON AFTER ENTITY WITH ID ${event.entityId} REMOVED: `,
       event.entity,
     );
   }
@@ -73,7 +75,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   beforeSoftRemove(event: SoftRemoveEvent<any>) {
     console.log(
-      `BEFORE ENTITY WITH ID ${event.entityId} SOFT REMOVED: `,
+      `COMMON BEFORE ENTITY WITH ID ${event.entityId} SOFT REMOVED: `,
       event.entity,
     );
   }
@@ -83,7 +85,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   afterSoftRemove(event: SoftRemoveEvent<any>) {
     console.log(
-      `AFTER ENTITY WITH ID ${event.entityId} SOFT REMOVED: `,
+      `COMMON AFTER ENTITY WITH ID ${event.entityId} SOFT REMOVED: `,
       event.entity,
     );
   }
@@ -93,7 +95,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   beforeRecover(event: RecoverEvent<any>) {
     console.log(
-      `BEFORE ENTITY WITH ID ${event.entityId} RECOVERED: `,
+      `COMMON BEFORE ENTITY WITH ID ${event.entityId} RECOVERED: `,
       event.entity,
     );
   }
@@ -103,7 +105,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   afterRecover(event: RecoverEvent<any>) {
     console.log(
-      `AFTER ENTITY WITH ID ${event.entityId} RECOVERED: `,
+      `COMMON AFTER ENTITY WITH ID ${event.entityId} RECOVERED: `,
       event.entity,
     );
   }
@@ -113,7 +115,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   beforeTransactionStart(event: TransactionStartEvent) {
     // console.log(`BEFORE TRANSACTION STARTED: `, event);
-    console.log(`BEFORE TRANSACTION STARTED: `);
+    console.log(`COMMON BEFORE TRANSACTION STARTED: `);
   }
 
   /**
@@ -121,7 +123,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   afterTransactionStart(event: TransactionStartEvent) {
     // console.log(`AFTER TRANSACTION STARTED: `, event);
-    console.log(`AFTER TRANSACTION STARTED: `);
+    console.log(`COMMON AFTER TRANSACTION STARTED: `);
   }
 
   /**
@@ -129,7 +131,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   beforeTransactionCommit(event: TransactionCommitEvent) {
     // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
-    console.log(`BEFORE TRANSACTION COMMITTED: `);
+    console.log(`COMMON BEFORE TRANSACTION COMMITTED: `);
   }
 
   /**
@@ -137,7 +139,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   afterTransactionCommit(event: TransactionCommitEvent) {
     // console.log(`AFTER TRANSACTION COMMITTED: `, event);
-    console.log(`AFTER TRANSACTION COMMITTED: `);
+    console.log(`COMMON AFTER TRANSACTION COMMITTED: `);
   }
 
   /**
@@ -145,7 +147,7 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   beforeTransactionRollback(event: TransactionRollbackEvent) {
     // console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
-    console.log(`BEFORE TRANSACTION ROLLBACK: `);
+    console.log(`COMMON BEFORE TRANSACTION ROLLBACK: `);
   }
 
   /**
@@ -153,6 +155,6 @@ export class TypeOrmCommonSubscriber implements EntitySubscriberInterface {
    */
   afterTransactionRollback(event: TransactionRollbackEvent) {
     // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
-    console.log(`AFTER TRANSACTION ROLLBACK: `);
+    console.log(`COMMON AFTER TRANSACTION ROLLBACK: `);
   }
 }

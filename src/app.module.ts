@@ -1,4 +1,7 @@
-import { APP_FILTER } from '@nestjs/core';
+import { PartFileModule } from './part-file/part-file.module';
+// import { PartFileModule } from './part_file/partfile.module';
+// import { Part_fileModule } from './part_file/part_file.module';
+// import { APP_FILTER } from '@nestjs/core';
 // import { HttpExceptionFilter } from './common/filters/http-Exception.filter';
 //import { APP_FILTER } from '@nestjs/core';
 //import { AllExceptionsFilter } from './item/exception.filter';
@@ -26,6 +29,7 @@ import { HealthModule } from './health/health.module';
     DatabaseModule,
     HealthModule,
     PartModule,
+    PartFileModule,
   ],
   controllers: [AppController],
   providers: [

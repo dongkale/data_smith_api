@@ -11,8 +11,10 @@ import {
   UseInterceptors,
   UploadedFile,
   UploadedFiles,
-  Query,
   Res,
+  NotFoundException,
+  Header,
+  StreamableFile,
 } from '@nestjs/common';
 import { PartService } from './part.service';
 import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
@@ -24,25 +26,32 @@ import {
   FileInterceptor,
   FilesInterceptor,
 } from '@nestjs/platform-express/multer';
-import { diskStorage } from 'multer';
+import multer, { diskStorage } from 'multer';
 import { ConfigService } from '@nestjs/config';
-import path from 'path';
+import path, { join } from 'path';
+import * as fs from 'fs';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
-// const storage = diskStorage({
-//   destination: './uploads',
-//   filename: (req, file, cb) => {
-//     const fileExt = path.extname(file.originalname); // .ext;
-//     const fileName = path.basename(file.originalname, fileExt);
-//     return cb(null, `${fileName}_${Date.now()}${fileExt}`);
-//   },
-// });
+// function getMulterOptions(dirPath): MulterOptions {
+//   return {
+//     storage: multer.diskStorage({
+//       destination: async (req, file, cb) => {
+//         return cb(null, dirPath);
+//       },
+//       filename: (req, file, cb) => {
+//         const fileExt = path.extname(file.originalname); // .ext;
+//         const fileName = path.basename(file.originalname, fileExt);
+//         return cb(null, `${fileName}_${Date.now()}${fileExt}`);
+//       },
+//     }),
+//   };
+// }
 
 @ApiSecurity('X-API-KEY')
 @Controller('part')
 @ApiTags('Part API')
 export class PartController {
   private readonly logger = new Logger(PartController.name);
-  static readonly __l__ = ConfigService;
 
   static readonly FILE_PATH = './part_uploads__';
   readonly T_FILE_PATH = './part_uploads__';
@@ -185,21 +194,34 @@ export class PartController {
   //     }),
   //   }),
   // )
+  // @UseInterceptors(FileInterceptor('file', getMulterOptions('./uploads')))
   async uploadFiles(@UploadedFiles() files: Express.Multer.File) {
     console.log(files);
     // 파일 처리 로직 추가
   }
 
-  @Get(':path/:name')
-  async download(
-    @Res() res: Response,
-    @Param('path') path: string,
-    @Param('name') name: string,
-    @Query('fn') fileName,
-  ) {
-    // res.download(
-    //   `${this.config.get('ATTACH_SAVE_PATH')}/${path}/${name}`,
-    //   fileName,
-    // );
-  }
+  // @Get('download/:filename')
+  // downloadFile(@Param('filename') filename: string, @Res() res: Response) {
+  //   const filePath = path.join(
+  //     __dirname,
+  //     '..',
+  //     '..',
+  //     '..',
+  //     'public',
+  //     'uploads',
+  //     filename,
+  //   );
+
+  //   // 파일 존재 여부 확인
+  //   if (!fs.existsSync(filePath)) {
+  //     throw new NotFoundException('파일을 찾을 수 없습니다.');
+  //   }
+
+  //   // 응답 헤더 설정
+  //   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+
+  //   // 파일 스트림 생성 및 응답으로 보내기
+  //   const fileStream = fs.createReadStream(filePath);
+  //   fileStream.pipe(res);
+  // }
 }
