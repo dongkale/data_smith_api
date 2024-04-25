@@ -53,8 +53,8 @@ import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer
 export class PartController {
   private readonly logger = new Logger(PartController.name);
 
-  static readonly FILE_PATH = './part_uploads__';
-  readonly T_FILE_PATH = './part_uploads__';
+  // static readonly FILE_PATH = './part_uploads__';
+  // readonly T_FILE_PATH = './part_uploads__';
 
   constructor(
     private partService: PartService,
@@ -70,6 +70,11 @@ export class PartController {
   @Get()
   async findAll() {
     const findAll = await this.partService.findAll();
+
+    for (const f of findAll) {
+      const p__ = JSON.parse(f.dataJson);
+      console.log(p__);
+    }
 
     return Object.assign({
       resultCode: CustomResponseDto.SUCCESS_CODE,

@@ -47,6 +47,7 @@ $ npm run test:cov
 - Health Check
 - Api-key Check(nestjs/passport)
 - Controller, Service Test
+- File Upload/Download(multer)
 
 ## License
 
