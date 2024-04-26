@@ -5,6 +5,8 @@ import {
   HealthCheckService,
   HttpHealthIndicator,
   DiskHealthIndicator,
+  TypeOrmHealthIndicator,
+  MemoryHealthIndicator,
 } from '@nestjs/terminus';
 
 @ApiTags('Health')
@@ -12,20 +14,25 @@ import {
 export class HealthController {
   constructor(
     private readonly health: HealthCheckService,
-    private readonly http: HttpHealthIndicator,
+    // private readonly http: HttpHealthIndicator,
     private readonly disk: DiskHealthIndicator,
+    private db: TypeOrmHealthIndicator,
+    private memory: MemoryHealthIndicator,
   ) {}
 
   @Get()
   @HealthCheck()
   check() {
     return this.health.check([
-      () => this.http.pingCheck('google', 'https://www.google.com'),
+      // () => this.http.pingCheck('google', 'https://www.google.com'),
       () =>
         this.disk.checkStorage('storage', {
-          thresholdPercent: 0.5,
-          path: '/',
+          path: process.cwd(),
+          thresholdPercent: 1,
         }),
+      () => this.db.pingCheck('database'),
+      () => this.memory.checkHeap('memory_heap', 300 * 1024 * 1024),
+      () => this.memory.checkRSS('memory_rss', 300 * 1024 * 1024),
     ]);
   }
 }

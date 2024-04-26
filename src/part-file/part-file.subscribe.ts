@@ -3,18 +3,17 @@ import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
-  RecoverEvent,
   RemoveEvent,
   SoftRemoveEvent,
-  TransactionCommitEvent,
-  TransactionRollbackEvent,
-  TransactionStartEvent,
   UpdateEvent,
 } from 'typeorm/index';
 import { PartFile } from './part-file.entity';
+import { Logger } from '@nestjs/common';
 
 @EventSubscriber()
 export class PartFileSubscriber implements EntitySubscriberInterface<PartFile> {
+  private readonly logger = new Logger(PartFileSubscriber.name);
+
   constructor(connection: Connection) {
     connection.subscribers.push(this);
   }
@@ -23,53 +22,55 @@ export class PartFileSubscriber implements EntitySubscriberInterface<PartFile> {
     return PartFile;
   }
 
+  afterLoad(entity: any) {
+    this.logger.log(`After Entity Load: ${JSON.stringify(entity, null, 2)}`);
+  }
+
   beforeInsert(event: InsertEvent<PartFile>): Promise<any> | void {
-    // event.entity.updatedAt = new Date();
-    console.log('PartFile beforeInsert : ', event.entity);
+    this.logger.log(
+      `Before Entity Inserted: ${JSON.stringify(event.entity, null, 2)}`,
+    );
   }
 
   afterInsert(event: InsertEvent<PartFile>): Promise<any> | void {
-    console.log('PartFile afterInsert : ', event.entity);
+    this.logger.log(
+      `After Entity Inserted: ${JSON.stringify(event.entity, null, 2)}`,
+    );
   }
 
   beforeUpdate(event: UpdateEvent<PartFile>): Promise<any> | void {
-    console.log('PartFile beforeUpdate : ', event.entity);
+    this.logger.log(
+      `Before Entity Updated: ${JSON.stringify(event.entity, null, 2)}`,
+    );
   }
 
   afterUpdate(event: UpdateEvent<PartFile>): Promise<any> | void {
-    console.log('PartFile afterUpdate : ', event.entity);
+    this.logger.log(
+      `After Entity Updated: ${JSON.stringify(event.entity, null, 2)}`,
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterRemove(event: RemoveEvent<PartFile>) {}
+  beforeRemove(event: RemoveEvent<PartFile>) {
+    this.logger.log(
+      `Before Entity with ID ${event.entityId} Removed: ${JSON.stringify(event.entity, null, 2)}`,
+    );
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeSoftRemove(event: SoftRemoveEvent<PartFile>) {}
+  afterRemove(event: RemoveEvent<PartFile>) {
+    this.logger.log(
+      `After Entity with ID ${event.entityId} Removed: ${JSON.stringify(event.entity, null, 2)}`,
+    );
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterSoftRemove(event: SoftRemoveEvent<PartFile>) {}
+  beforeSoftRemove(event: SoftRemoveEvent<PartFile>) {
+    this.logger.log(
+      `Before Entity with ID ${event.entityId}: ${JSON.stringify(event.entity, null, 2)}`,
+    );
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeRecover(event: RecoverEvent<PartFile>) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterRecover(event: RecoverEvent<PartFile>) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeTransactionStart(event: TransactionStartEvent) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterTransactionStart(event: TransactionStartEvent) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeTransactionCommit(event: TransactionCommitEvent) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterTransactionCommit(event: TransactionCommitEvent) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeTransactionRollback(event: TransactionRollbackEvent) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterTransactionRollback(event: TransactionRollbackEvent) {}
+  afterSoftRemove(event: SoftRemoveEvent<PartFile>) {
+    this.logger.log(
+      `After Entity with ID ${event.entityId} Soft Removed: ${JSON.stringify(event.entity, null, 2)}`,
+    );
+  }
 }
