@@ -1,0 +1,10 @@
+{
+  "paths": "C:/data-smith-data/LDK_03.gltf",
+  "meshTR": {
+    "scale3D": { "x": 1, "y": 1, "z": 1 },
+    "rotation": { "w": 1, "x": 0, "y": 0, "z": 0 },
+    "translation": { "x": 0, "y": 0, "z": 0 }
+  },
+  "meshName": "Shooting_Range_v03.udatasmith",
+  "meshDescription": "Default Description"
+}

@@ -56,7 +56,7 @@ import { PartFileSubscriber } from './part-file.subscribe';
       useFactory: async (configService: ConfigService) => {
         const dirPath =
           configService.get<string>('PART_FILE_UPLOAD_PATH') ||
-          './common_uploads';
+          'common_uploads';
 
         return multerConfigService(dirPath);
       },
