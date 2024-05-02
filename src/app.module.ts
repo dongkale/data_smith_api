@@ -18,12 +18,17 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthModule } from './common/auth/auth.module';
 import { RequestLoggerInterceptor } from './common/interceptor/request-logger.interceptor';
 import { HealthModule } from './health/health.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env`,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'part_uploads'),
     }),
     AuthModule,
     DatabaseModule,

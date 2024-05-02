@@ -54,3 +54,9 @@ $ npm run test:cov
 Nest is [MIT licensed](LICENSE).
 
 ## Document
+
+## install
+
+- static file
+
+npm install --save @nestjs/serve-static
